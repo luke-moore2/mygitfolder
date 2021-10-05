@@ -96,6 +96,12 @@ class Room:
         for item in self.items.keys():
             s += item + " "
         s += "\n"
+        
+        # next, grabbables in the room
+        s += "You can take: "
+        for grabbable in self.grabbables:
+            s += grabbable + " "
+        s += "\n"
 
         # next, the exits from the room
         s += "Exits: "
