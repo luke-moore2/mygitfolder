@@ -124,23 +124,32 @@ class Game(Frame):
                 r1.addExit("south",r3)
                 # add grabbables to room 1
                 r1.addGrabbable("key")
+                # new grabbable
+                r1.addGrabbable("treasure_map")
                 # add items to room 1
                 r1.addItem("chair","It is made of wicker and no one is sitting on it.")
+                
 
                 r2.addExit("west",r1)
                 r2.addExit("south",r4)
                 r2.addItem("rug","It is nice and Indian, and needs to be vacuumed.")
                 r2.addItem("fireplace","It is full of ashes.")
+                # new grabbable
+                r2.addGrabbable("broom")
 
                 r3.addExit("north",r1)
                 r3.addExit("east",r4)
                 r3.addGrabbable("book")
+                # new grabbable
+                r3.addGrabbable("pen")
                 r3.addItem("statue","There is nothing special about it.")
                 r3.addItem("desk","The statue is resting on it. So is a book.")
 
                 r4.addExit("north",r2)
                 r4.addExit("west",r3)
                 r4.addExit("south",None) # Death!
+                # new grabbable
+                r4.addGrabbable("empty_mug")
                 r4.addGrabbable("6-pack")
                 r4.addItem("brew_rig","Gourd is brewing some kind of oatmeal stout on the brew rig. A 6-pack is beside it.")
 
@@ -149,6 +158,9 @@ class Game(Frame):
 
                 # initialize the player's inventory
                 Game.inventory = []
+                
+                # initialize the player's score, new variable to keep track of points
+                Game.score = 0
                 
     # sets up the GUI
     def setupGUI(self):
@@ -202,12 +214,16 @@ class Game(Frame):
                 Game.text.delete("1.0", END)
                 if (Game.currentRoom == None):
                         # if dead, let the player know
-                        Game.text.insert(END, "You are dead. The only thing you can do now is quit.\n")
+                        # updates player score if user dies, and lets the player know
+                        # that their score has been updated
+                        Game.score = 0
+                        Game.text.insert(END, "You are dead. The only thing you can do now is quit. Your score is now 0. \n")
                 else:
                         # otherwise, display the appropriate status
+                        # new addition - displays user's score
                         Game.text.insert(END, str(Game.currentRoom) +\
                                          "\nYou are carrying: " + str(Game.inventory) +\
-                                         "\n\n" + status)
+                                         "\n\n" + status + "\n\n" + str(Game.score))
                         Game.text.config(state=DISABLED)
                 
     # plays the game
@@ -287,6 +303,8 @@ class Game(Frame):
                                         if (noun == grabbable):
                                                 # add the grabbable item to the player's inventory
                                                 Game.inventory.append(grabbable)
+                                                # increment the player's score
+                                                Game.score = Game.score + 15
                                                 # remove the grabbable item from the room
                                                 Game.currentRoom.delGrabbable(grabbable)
                                                 # set the response(success)
