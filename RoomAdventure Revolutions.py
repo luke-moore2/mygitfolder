@@ -223,7 +223,7 @@ class Game(Frame):
                         # new addition - displays user's score
                         Game.text.insert(END, str(Game.currentRoom) +\
                                          "\nYou are carrying: " + str(Game.inventory) +\
-                                         "\n\n" + status + "\n\n" + str(Game.score))
+                                         "\n\n" + status + "\n" + "Your score is " + str(Game.score))
                         Game.text.config(state=DISABLED)
                 
     # plays the game
