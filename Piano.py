@@ -16,15 +16,16 @@ MIXER_BUFF = 1024
 # the note generator class
 class Note(pygame.mixer.Sound):
 # note that volume ranges from 0.0 to 1.0
-    def __init__(self, frequency, volume):
+    def __init__(self, frequency, volume,form):
         self.frequency = frequency
+        self.form = form
         # initialize the note using an array of samples
         pygame.mixer.Sound.__init__(self,\
-            buffer=self.build_samples())
+            buffer=self.build_samples(form))
         self.set_volume(volume)
     
     # builds an array of samples for the current note
-    def build_samples(self):
+    def build_samples(self,form):
         # calculate the period and amplitude of the note's wave
         period = int(round(MIXER_FREQ / self.frequency))
         amplitude = 2 ** (abs(MIXER_SIZE) - 1) - 1
@@ -32,7 +33,7 @@ class Note(pygame.mixer.Sound):
         # signed 16-bit "shorts")
         samples = array("h", [0] * period)
     
-        if key == 20:
+        if form == 20:
         # generate the note's samples
             for t in range(period):
                 if (t < period / 2):
@@ -41,28 +42,28 @@ class Note(pygame.mixer.Sound):
                     samples[t] = -amplitude
                 return samples
         
-        if key == 16:
+        if form == 16:
         #Triangle
             for t in range(period):
                 if t <(period/2):
-                    samples[t]=(32767/42)*(t)
+                    samples[t]=int((32767/42)*(t))
                 if t >(period/2) and t<((3*period)/4):
-                    samples[t]=(-32767/42)*(t-42)+32767
+                    samples[t]=int((-32767/42)*(t-42)+32767)
                 if t>((3*period)/4):
-                    samples[t]=(32767/42)*(t-126)-32767
+                    samples[t]=int((32767/42)*(t-126)-32767)
                 return samples
         #Saw
-        if key == 12:
+        if form == 12:
             for t in range(period):
                if t <(period/2):
-                   samples[t]=(32767/84.5)*(t)
+                   samples[t]=int((32767/84.5)*(t))
                else:
-                   samples[t]=(32767/84.5)*(t-84.5)-32767
+                   samples[t]=int((32767/84.5)*(t-84.5)-32767)
                return samples
         
-        if key == 26:
+        if form == 26:
             for t in range (period):
-               samples[t]=32767*sin(2*t+(t/7))
+               samples[t]=int(32767*math.sin(2*t+(t/7)))
         
     
 
@@ -136,7 +137,7 @@ GPIO.setup(green, GPIO.OUT)
 GPIO.setup(blue, GPIO.OUT)
 # create the actual notes
 for n in range(len(freqs)):
-    notes.append(Note(freqs[n], 1))
+    notes.append(Note(freqs[n], 1,keys[n]))
 # begin in a non-recording state and initialize the song
 recording = False
 song = []
