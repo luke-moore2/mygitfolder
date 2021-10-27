@@ -32,31 +32,37 @@ class Note(pygame.mixer.Sound):
         # signed 16-bit "shorts")
         samples = array("h", [0] * period)
     
+        if key == 20:
         # generate the note's samples
-        for t in range(period):
-            if (t < period / 2):
-                samples[t] = amplitude
-            else:
-                samples[t] = -amplitude
-        return samples
+            for t in range(period):
+                if (t < period / 2):
+                    samples[t] = amplitude
+                else:
+                    samples[t] = -amplitude
+                return samples
+        
+        if key == 16:
         #Triangle
-        #for t in range(period):
-        ##    if t <(period/2):
-        #        samples[t]=(32767/42)(t)
-        #    if t >(period/2) and t<((3*period)/4):
-        #        samples[t]=(-32767/42)(t-42)+32767
-        #    if t>((3*period)/4):
-                samples[t]=(32767/42)(t-126)-32767
-        return samples
+            for t in range(period):
+        ##      if t <(period/2):
+        #           samples[t]=(32767/42)(t)
+        #       if t >(period/2) and t<((3*period)/4):
+        #           samples[t]=(-32767/42)(t-42)+32767
+        #       if t>((3*period)/4):
+                    samples[t]=(32767/42)(t-126)-32767
+                return samples
         #Saw
-        #for t in range(period):
-        #    if t <(period/2):
-        #        samples[t]=(32767/84.5)(t)
-        #    else:
-        #        samples[t]=(32767/84.5)(t-84.5)-32767
-        #return samples
-        #for t in range (period):
-        #    samples[t]=32767*sin(2t+(t/7))
+        if key == 12:
+            for t in range(period):
+               if t <(period/2):
+                   samples[t]=(32767/84.5)(t)
+               else:
+                   samples[t]=(32767/84.5)(t-84.5)-32767
+               return samples
+        
+        if key == 26:
+            for t in range (period):
+               samples[t]=32767*sin(2t+(t/7))
         
     
 
@@ -111,7 +117,7 @@ pygame.init()
 GPIO.setmode(GPIO.BCM)
 # setup the pins and frequencies for the notes (C, E, G, B)
 keys = [ 20, 16, 12, 26 ]
-freqs = [ 261.6, 329.6, 392.0, 493.9 ]
+freqs = [ 261.6, 261.6, 261.6, 261.6 ]
 notes = []
 # setup the button pins
 play = 19
