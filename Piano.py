@@ -44,25 +44,25 @@ class Note(pygame.mixer.Sound):
         if key == 16:
         #Triangle
             for t in range(period):
-        ##      if t <(period/2):
-        #           samples[t]=(32767/42)(t)
-        #       if t >(period/2) and t<((3*period)/4):
-        #           samples[t]=(-32767/42)(t-42)+32767
-        #       if t>((3*period)/4):
-                    samples[t]=(32767/42)(t-126)-32767
+                if t <(period/2):
+                    samples[t]=(32767/42)*(t)
+                if t >(period/2) and t<((3*period)/4):
+                    samples[t]=(-32767/42)*(t-42)+32767
+                if t>((3*period)/4):
+                    samples[t]=(32767/42)*(t-126)-32767
                 return samples
         #Saw
         if key == 12:
             for t in range(period):
                if t <(period/2):
-                   samples[t]=(32767/84.5)(t)
+                   samples[t]=(32767/84.5)*(t)
                else:
-                   samples[t]=(32767/84.5)(t-84.5)-32767
+                   samples[t]=(32767/84.5)*(t-84.5)-32767
                return samples
         
         if key == 26:
             for t in range (period):
-               samples[t]=32767*sin(2t+(t/7))
+               samples[t]=32767*sin(2*t+(t/7))
         
     
 
