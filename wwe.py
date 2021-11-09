@@ -5,6 +5,8 @@ import pickle
 import tkinter as tk
 from pygame import *
 from tkinter import *
+import tkinter.filedialog as filedialog
+
 #class Welcome(tk.frame):
 #        def __init__(self, master=None):
 #                super().__init__(master)
@@ -27,10 +29,11 @@ from tkinter import *
 
 
 class MusicPlayer(tk.Frame):
+   global frame
+   frame=0
    def __init__(self, master=None):
       super().__init__(master)
       self.master = master
-      self.pack()
       mixer.init()
 
       if os.path.exists('songs.pickle'):
@@ -43,6 +46,8 @@ class MusicPlayer(tk.Frame):
       self.paused = True
       self.played = False
       self.setupGUI()
+      frame=1
+      self.pack()
    def setupGUI(self):
            self.display = Label(self, text="Welcome To Music PI", anchor=E,bg="white", height=1, font=("TexGyreAdventor", 45))
            self.display.grid(row=0, column=0, columnspan=4,sticky=N+E+S+W)
@@ -50,13 +55,15 @@ class MusicPlayer(tk.Frame):
            self.button1.grid(row=2, column=2, sticky="NSEW",columnspan=1)
            self.button2=Button(self,text="listen to Radio",bg="green",height="3",width="30",command=lambda:[self.clear(),self.listenradio()])
            self.button2.grid(row=4, column=2, sticky="NSEW")
+           self.homebutton=Button(self,text="Home",bg="red",command=lambda:[self.homebuttonfunction(),self.setupGUI()])
+           self.homebutton.grid(row=8, column=2,)
+           self.pack()
    def clear(self):
       self.display.grid_forget()
       self.button1.grid_forget()
       self.button2.grid_forget()
    def listenmusic(self):
-      self.homebutton=Button(self,text="Home",bg="red")
-      self.homebutton.grid(row=1, column=2, padx=5)
+      frame=2
       self.create_frames()
       self.track_widgets()
       self.control_widgets()
@@ -65,9 +72,26 @@ class MusicPlayer(tk.Frame):
       self.master.bind('<Left>', self.prev_song)
       self.master.bind('<space>', self.play_pause_song)
       self.master.bind('<Right>', self.next_song)
+   
+   def homebuttonfunction(self):
+      self.track.grid_forget()
+      self.tracklist.grid_forget()
+      self.controls.grid_forget()
+      self.canvas.grid_forget()
+      self.songtrack.grid_forget()
+      self.loadSongs.grid_forget()
+      self.prev.grid_forget()
+      self.next.grid_forget()
+      self.pause.grid_forget()
+      self.slider.grid_forget()
+      self.list.grid_forget()
+      
+   
+      
+      
         
    def create_frames(self):
-      self.track = tk.LabelFrame(self, text='Song Track', font=("times new roman",15,"bold"),bg="grey",fg="white",bd=5,relief=tk.GROOVE)
+      self.track = tk.LabelFrame(self, text='Current Song', font=("times new roman",15,"bold"),bg="grey",fg="white",bd=5,relief=tk.GROOVE)
       self.track.config(width=410,height=300)
       self.track.grid(row=0, column=0, padx=10)
 
@@ -213,17 +237,22 @@ class MusicPlayer(tk.Frame):
       self.v = self.volume.get()
       mixer.music.set_volume(self.v / 10)
    def listenradio(self):
-           pass
-
+      frame=3
+      self.play = tk.LabelFrame(self, text='Current Song', font=("times new roman",15,"bold"),bg="grey",fg="white",bd=5,relief=tk.GROOVE)
+      self.t.config(width=410,height=300)
+      self.track.grid(row=0, column=0, padx=10)
+      
+      pass
+#items=[self.track,self.tracklist,self.controls,self.canvas,self.loadSongs,self.songtrack,self.prev,self.pause,self.next,self.volume,self.slider,self.scrollbar,self.list]
 
 # ----------------------------- Main -------------------------------------------
 
 
 root = tk.Tk()
 root.geometry('600x400')
-root.title('PI MUSIC')
+root.title('Rasberry Pi Jukebox')
 
-img = PhotoImage(file='music.gif')
+img = PhotoImage(file='jukebox.gif')
 next_ = PhotoImage(file = 'next.gif')
 prev = PhotoImage(file='previous.gif')
 play = PhotoImage(file='play.gif')
